@@ -4,8 +4,8 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 module.exports = async function (context, myTimer) {
   const discordToken = process.env.DISCORD_TOKEN;
-  const CHANNEL_ID = "1110443933974151248"; // Channel ID to read from signup list
-  const MESSAGE_ID = "1110564667669102672"; // message to read from emoji reactions
+  const CHANNEL_ID = process.env.CHANNEL_ID; // Channel ID to read from signup list
+  const MESSAGE_ID = process.env.MESSAGE_ID; // message to read from emoji reactions
   let messageSent = false;
   const settings = {
     apiKey: process.env.ALCHEMY_API_KEY,
@@ -15,11 +15,13 @@ module.exports = async function (context, myTimer) {
   client.on(Events.Error, async (e) => {
     console.log(e);
   });
+  //cold starts
   client.on(Events.ClientReady, async (c) => {
     await getGweiAndSendMessage();
   });
 
   await client.login(discordToken);
+  //if client is already ready just send it bro
   if (client.isReady() == true && messageSent == false) {
     await getGweiAndSendMessage();
   }
@@ -28,6 +30,7 @@ module.exports = async function (context, myTimer) {
     const alchemy = new Alchemy(settings);
     const hexGwei = await alchemy.core.getGasPrice();
     const gwei = Utils.formatUnits(hexGwei, "gwei");
+    console.log(`gwei is ${gwei}`);
     if ((parseInt(gwei) < 45 || parseInt(gwei) > 80) && messageSent == false) {
       const channel = client.channels.cache.get(CHANNEL_ID);
       channel.messages.fetch(MESSAGE_ID).then(async (message) => {
@@ -52,12 +55,22 @@ module.exports = async function (context, myTimer) {
                   )} gwei), wait a bit to reroll if you can.`
             } ${taggedUsers.join(", ")}`;
 
-            // Send the follow-up message
+            // clear previous and send new message
+            await cleanupPreviousMessages(channel);
             await reaction.message.channel.send(followUpMessage);
             messageSent = true;
           }
         });
       });
     }
+  }
+
+  async function cleanupPreviousMessages(channel) {
+    const messages = await channel.messages.fetch();
+    const filteredMessages = messages.filter(
+      (x) => x.author.id === "1110427816341819502"
+    );
+
+    await channel.bulkDelete(filteredMessages, true);
   }
 };
