@@ -4,8 +4,8 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 module.exports = async function (context, myTimer) {
   const discordToken = process.env.DISCORD_TOKEN;
-  const CHANNEL_ID = "1068005248754532403"; // Channel ID to read from signup list
-  const MESSAGE_ID = "1110430218713301032"; // message to read from emoji reactions
+  const CHANNEL_ID = "1110443933974151248"; // Channel ID to read from signup list
+  const MESSAGE_ID = "1110564667669102672"; // message to read from emoji reactions
   let messageSent = false;
   const settings = {
     apiKey: process.env.ALCHEMY_API_KEY,
