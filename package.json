@@ -6,6 +6,8 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "alchemy-sdk": "^2.8.3",
+    "discord.js": "^14.11.0"
+  }
 }
