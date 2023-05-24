@@ -37,7 +37,7 @@ module.exports = async function (context, myTimer) {
   context.log(
     `Client is ready: ${client.isReady()}, messageSent: ${messageSent}`
   );
-  if (client.isReady() == true && messageSent == false) {
+  if ((client.isReady() == true || loginResponse === discordToken) && messageSent == false) {
     var success = await getGweiAndSendMessage();
     context.log(success);
   }
