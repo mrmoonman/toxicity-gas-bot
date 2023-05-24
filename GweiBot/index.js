@@ -33,7 +33,9 @@ module.exports = async function (context, myTimer) {
   client.login(discordToken);
   //if client is already ready just send it bro
 
-  context.log(`Client is ready: ${client.isReady()}`);
+  context.log(
+    `Client is ready: ${client.isReady()}, messageSent: ${messageSent}`
+  );
   if (client.isReady() == true && messageSent == false) {
     var success = await getGweiAndSendMessage();
     context.log(success);
@@ -80,7 +82,9 @@ module.exports = async function (context, myTimer) {
       return false;
     }
   }
-  context.log("aight nah man");
+  setTimeout(() => {
+    context.log("aight nah man, delayed 4 seconds");
+  }, 4000);
   async function cleanupPreviousMessages(channel) {
     const messages = await channel.messages.fetch();
     const filteredMessages = messages.filter(
