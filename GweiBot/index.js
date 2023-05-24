@@ -25,7 +25,8 @@ module.exports = async function (context, myTimer) {
   //cold starts
   client.on(Events.ClientReady, async (c) => {
     context.log("Client is ready");
-    await getGweiAndSendMessage();
+    var success = await getGweiAndSendMessage();
+    context.log(success);
   });
 
   context.log("Logging In");
@@ -34,7 +35,8 @@ module.exports = async function (context, myTimer) {
 
   context.log(`Client is ready: ${client.isReady()}`);
   if (client.isReady() == true && messageSent == false) {
-    await getGweiAndSendMessage();
+    var success = await getGweiAndSendMessage();
+    context.log(success);
   }
 
   async function getGweiAndSendMessage() {
@@ -71,9 +73,11 @@ module.exports = async function (context, myTimer) {
             await cleanupPreviousMessages(channel);
             await reaction.message.channel.send(followUpMessage);
             messageSent = true;
+            return messageSent;
           }
         });
       });
+      return false;
     }
   }
   context.log("aight nah man");
