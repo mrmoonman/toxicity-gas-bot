@@ -3,15 +3,15 @@ const { Client, Events, GatewayIntentBits } = require("discord.js");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 module.exports = async function (context, myTimer) {
-  context.info("here's our custom log for this baby lets go");
+  context.log("here's our custom log for this baby lets go");
   const discordToken = process.env["DISCORD_TOKEN"];
   const CHANNEL_ID = process.env["CHANNEL_ID"]; // Channel ID to read from signup list
   const MESSAGE_ID = process.env["MESSAGE_ID"]; // message to read from emoji reactions
   let messageSent = false;
 
-  context.info(discordToken);
-  context.info(CHANNEL_ID);
-  context.info(MESSAGE_ID);
+  context.log(discordToken);
+  context.log(CHANNEL_ID);
+  context.log(MESSAGE_ID);
   const settings = {
     apiKey: process.env["ALCHEMY_API_KEY"],
     network: Network.ETH_MAINNET,
@@ -19,7 +19,7 @@ module.exports = async function (context, myTimer) {
 
   client.on(Events.Error, async (e) => {
     context.error(JSON.stringify(e));
-    context.info(e);
+    context.log(e);
   });
   //cold starts
   client.on(Events.ClientReady, async (c) => {
@@ -33,18 +33,18 @@ module.exports = async function (context, myTimer) {
   }
 
   async function getGweiAndSendMessage() {
-    context.info("Getting gwei");
+    context.log("Getting gwei");
     const alchemy = new Alchemy(settings);
     const hexGwei = await alchemy.core.getGasPrice();
     const gwei = Utils.formatUnits(hexGwei, "gwei");
-    context.info(`gwei is ${gwei}`);
+    context.log(`gwei is ${gwei}`);
     if ((parseInt(gwei) < 45 || parseInt(gwei) > 80) && messageSent == false) {
       const channel = client.channels.cache.get(CHANNEL_ID);
       channel.messages.fetch(MESSAGE_ID).then(async (message) => {
         message.reactions.cache.each(async (reaction) => {
           // Check if the reaction matches the specified emoji
           if (reaction.emoji.name === "🧪") {
-            context.info("get that reaction tho");
+            context.log("get that reaction tho");
             // Iterate through the users who reacted with the emoji
             const users = await reaction.users.fetch();
 
