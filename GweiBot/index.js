@@ -23,11 +23,15 @@ module.exports = async function (context, myTimer) {
   });
   //cold starts
   client.on(Events.ClientReady, async (c) => {
+    context.log("Client is ready");
     await getGweiAndSendMessage();
   });
 
+  context.log("Logging In");
   await client.login(discordToken);
   //if client is already ready just send it bro
+
+  console.log(`Client is ready: ${client.isReady()}`);
   if (client.isReady() == true && messageSent == false) {
     await getGweiAndSendMessage();
   }
