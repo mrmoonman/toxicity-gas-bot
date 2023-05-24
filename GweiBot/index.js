@@ -4,16 +4,16 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 module.exports = async function (context, myTimer) {
   context.info("here's our custom log for this baby lets go");
-  const discordToken = process.env.DISCORD_TOKEN;
-  const CHANNEL_ID = process.env.CHANNEL_ID; // Channel ID to read from signup list
-  const MESSAGE_ID = process.env.MESSAGE_ID; // message to read from emoji reactions
+  const discordToken = process.env["DISCORD_TOKEN"];
+  const CHANNEL_ID = process.env["CHANNEL_ID"]; // Channel ID to read from signup list
+  const MESSAGE_ID = process.env["MESSAGE_ID"]; // message to read from emoji reactions
   let messageSent = false;
 
   context.info(discordToken);
   context.info(CHANNEL_ID);
   context.info(MESSAGE_ID);
   const settings = {
-    apiKey: process.env.ALCHEMY_API_KEY,
+    apiKey: process.env["ALCHEMY_API_KEY"],
     network: Network.ETH_MAINNET,
   };
 
