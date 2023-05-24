@@ -32,7 +32,7 @@ module.exports = async function (context, myTimer) {
   await client.login(discordToken);
   //if client is already ready just send it bro
 
-  context.log.log(`Client is ready: ${client.isReady()}`);
+  context.log(`Client is ready: ${client.isReady()}`);
   if (client.isReady() == true && messageSent == false) {
     await getGweiAndSendMessage();
   }
