@@ -30,7 +30,8 @@ module.exports = async function (context, myTimer) {
   });
 
   context.log("Logging In");
-  client.login(discordToken);
+  var loginResponse = await client.login(discordToken);
+  context.log(loginResponse);
   //if client is already ready just send it bro
 
   context.log(
