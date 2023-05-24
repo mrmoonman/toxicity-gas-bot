@@ -13,7 +13,8 @@ module.exports = async function (context, myTimer) {
   };
 
   client.on(Events.Error, async (e) => {
-    console.log(e);
+    context.error(JSON.stringify(e));
+    context.info(e);
   });
   //cold starts
   client.on(Events.ClientReady, async (c) => {
@@ -27,17 +28,18 @@ module.exports = async function (context, myTimer) {
   }
 
   async function getGweiAndSendMessage() {
+    context.info("Getting gwei");
     const alchemy = new Alchemy(settings);
     const hexGwei = await alchemy.core.getGasPrice();
     const gwei = Utils.formatUnits(hexGwei, "gwei");
-    console.log(`gwei is ${gwei}`);
+    context.info(`gwei is ${gwei}`);
     if ((parseInt(gwei) < 45 || parseInt(gwei) > 80) && messageSent == false) {
       const channel = client.channels.cache.get(CHANNEL_ID);
       channel.messages.fetch(MESSAGE_ID).then(async (message) => {
         message.reactions.cache.each(async (reaction) => {
           // Check if the reaction matches the specified emoji
           if (reaction.emoji.name === "🧪") {
-            console.log("get that reaction tho");
+            context.info("get that reaction tho");
             // Iterate through the users who reacted with the emoji
             const users = await reaction.users.fetch();
 
